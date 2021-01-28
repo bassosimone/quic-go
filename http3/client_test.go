@@ -64,7 +64,7 @@ var _ = Describe("Client", func() {
 		client, err := newClient("localhost:1337", nil, &roundTripperOpts{}, nil, nil)
 		Expect(err).ToNot(HaveOccurred())
 		var dialAddrCalled bool
-		dialAddr = func(_ string, tlsConf *tls.Config, quicConf *quic.Config) (quic.EarlySession, error) {
+		dialAddr = func(_ context.Context, _ string, tlsConf *tls.Config, quicConf *quic.Config) (quic.EarlySession, error) {
 			Expect(quicConf).To(Equal(defaultQuicConfig))
 			Expect(tlsConf.NextProtos).To(Equal([]string{nextProtoH3Draft29}))
 			Expect(quicConf.Versions).To(Equal([]protocol.VersionNumber{protocol.VersionTLS}))
@@ -79,7 +79,7 @@ var _ = Describe("Client", func() {
 		client, err := newClient("quic.clemente.io", nil, &roundTripperOpts{}, nil, nil)
 		Expect(err).ToNot(HaveOccurred())
 		var dialAddrCalled bool
-		dialAddr = func(hostname string, _ *tls.Config, _ *quic.Config) (quic.EarlySession, error) {
+		dialAddr = func(_ context.Context, hostname string, _ *tls.Config, _ *quic.Config) (quic.EarlySession, error) {
 			Expect(hostname).To(Equal("quic.clemente.io:443"))
 			dialAddrCalled = true
 			return nil, errors.New("test done")
@@ -100,6 +100,7 @@ var _ = Describe("Client", func() {
 		Expect(err).ToNot(HaveOccurred())
 		var dialAddrCalled bool
 		dialAddr = func(
+			ctx context.Context,
 			hostname string,
 			tlsConfP *tls.Config,
 			quicConfP *quic.Config,
@@ -122,7 +123,7 @@ var _ = Describe("Client", func() {
 		tlsConf := &tls.Config{ServerName: "foo.bar"}
 		quicConf := &quic.Config{MaxIdleTimeout: 1337 * time.Second}
 		var dialerCalled bool
-		dialer := func(network, address string, tlsConfP *tls.Config, quicConfP *quic.Config) (quic.EarlySession, error) {
+		dialer := func(ctx context.Context, network, address string, tlsConfP *tls.Config, quicConfP *quic.Config) (quic.EarlySession, error) {
 			Expect(network).To(Equal("udp"))
 			Expect(address).To(Equal("localhost:1337"))
 			Expect(tlsConfP.ServerName).To(Equal("foo.bar"))
@@ -141,7 +142,7 @@ var _ = Describe("Client", func() {
 		testErr := errors.New("handshake error")
 		client, err := newClient("localhost:1337", nil, &roundTripperOpts{}, nil, nil)
 		Expect(err).ToNot(HaveOccurred())
-		dialAddr = func(hostname string, _ *tls.Config, _ *quic.Config) (quic.EarlySession, error) {
+		dialAddr = func(ctx context.Context, hostname string, _ *tls.Config, _ *quic.Config) (quic.EarlySession, error) {
 			return nil, testErr
 		}
 		_, err = client.RoundTrip(req)
@@ -157,7 +158,7 @@ var _ = Describe("Client", func() {
 		session.EXPECT().HandshakeComplete().Return(handshakeCtx).MaxTimes(1)
 		session.EXPECT().OpenStreamSync(context.Background()).Return(nil, testErr).MaxTimes(1)
 		session.EXPECT().CloseWithError(gomock.Any(), gomock.Any()).MaxTimes(1)
-		dialAddr = func(hostname string, _ *tls.Config, _ *quic.Config) (quic.EarlySession, error) {
+		dialAddr = func(ctx context.Context, hostname string, _ *tls.Config, _ *quic.Config) (quic.EarlySession, error) {
 			return session, nil
 		}
 		defer GinkgoRecover()
@@ -204,7 +205,7 @@ var _ = Describe("Client", func() {
 			str = mockquic.NewMockStream(mockCtrl)
 			sess = mockquic.NewMockEarlySession(mockCtrl)
 			sess.EXPECT().OpenUniStream().Return(controlStr, nil).MaxTimes(1)
-			dialAddr = func(hostname string, _ *tls.Config, _ *quic.Config) (quic.EarlySession, error) {
+			dialAddr = func(ctx context.Context, hostname string, _ *tls.Config, _ *quic.Config) (quic.EarlySession, error) {
 				return sess, nil
 			}
 			var err error
