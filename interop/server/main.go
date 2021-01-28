@@ -8,11 +8,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/lucas-clemente/quic-go"
-	"github.com/lucas-clemente/quic-go/http3"
-	"github.com/lucas-clemente/quic-go/interop/http09"
-	"github.com/lucas-clemente/quic-go/interop/utils"
-	"github.com/lucas-clemente/quic-go/qlog"
+	"github.com/bassosimone/quic-go"
+	"github.com/bassosimone/quic-go/http3"
+	"github.com/bassosimone/quic-go/interop/http09"
+	"github.com/bassosimone/quic-go/interop/utils"
+	"github.com/bassosimone/quic-go/qlog"
 )
 
 var tlsConf *tls.Config

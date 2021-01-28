@@ -1,8 +1,8 @@
 package logutils
 
 import (
-	"github.com/lucas-clemente/quic-go/internal/wire"
-	"github.com/lucas-clemente/quic-go/logging"
+	"github.com/bassosimone/quic-go/internal/wire"
+	"github.com/bassosimone/quic-go/logging"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

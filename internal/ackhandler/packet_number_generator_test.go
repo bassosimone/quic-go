@@ -3,7 +3,7 @@ package ackhandler
 import (
 	"math"
 
-	"github.com/lucas-clemente/quic-go/internal/protocol"
+	"github.com/bassosimone/quic-go/internal/protocol"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
