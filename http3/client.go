@@ -34,7 +34,7 @@ var defaultQuicConfig = &quic.Config{
 	Versions:           []protocol.VersionNumber{protocol.VersionTLS},
 }
 
-var dialAddr = quic.DialAddrEarly
+var dialAddr = quic.DialAddrEarlyContext
 
 type roundTripperOpts struct {
 	DisableCompression bool
@@ -49,7 +49,7 @@ type client struct {
 	opts    *roundTripperOpts
 
 	dialOnce     sync.Once
-	dialer       func(network, addr string, tlsCfg *tls.Config, cfg *quic.Config) (quic.EarlySession, error)
+	dialer       func(ctx context.Context, network, addr string, tlsCfg *tls.Config, cfg *quic.Config) (quic.EarlySession, error)
 	handshakeErr error
 
 	requestWriter *requestWriter
@@ -67,7 +67,7 @@ func newClient(
 	tlsConf *tls.Config,
 	opts *roundTripperOpts,
 	quicConfig *quic.Config,
-	dialer func(network, addr string, tlsCfg *tls.Config, cfg *quic.Config) (quic.EarlySession, error),
+	dialer func(ctx context.Context, network, addr string, tlsCfg *tls.Config, cfg *quic.Config) (quic.EarlySession, error),
 ) (*client, error) {
 	if quicConfig == nil {
 		quicConfig = defaultQuicConfig.Clone()
@@ -102,12 +102,12 @@ func newClient(
 	}, nil
 }
 
-func (c *client) dial() error {
+func (c *client) dial(ctx context.Context) error {
 	var err error
 	if c.dialer != nil {
-		c.session, err = c.dialer("udp", c.hostname, c.tlsConf, c.config)
+		c.session, err = c.dialer(ctx, "udp", c.hostname, c.tlsConf, c.config)
 	} else {
-		c.session, err = dialAddr(c.hostname, c.tlsConf, c.config)
+		c.session, err = dialAddr(ctx, c.hostname, c.tlsConf, c.config)
 	}
 	if err != nil {
 		return err
@@ -212,7 +212,7 @@ func (c *client) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 
 	c.dialOnce.Do(func() {
-		c.handshakeErr = c.dial()
+		c.handshakeErr = c.dial(req.Context())
 	})
 
 	if c.handshakeErr != nil {
