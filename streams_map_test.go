@@ -7,10 +7,10 @@ import (
 	"net"
 
 	"github.com/golang/mock/gomock"
-	"github.com/lucas-clemente/quic-go/internal/flowcontrol"
-	"github.com/lucas-clemente/quic-go/internal/mocks"
-	"github.com/lucas-clemente/quic-go/internal/protocol"
-	"github.com/lucas-clemente/quic-go/internal/wire"
+	"github.com/bassosimone/quic-go/internal/flowcontrol"
+	"github.com/bassosimone/quic-go/internal/mocks"
+	"github.com/bassosimone/quic-go/internal/protocol"
+	"github.com/bassosimone/quic-go/internal/wire"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

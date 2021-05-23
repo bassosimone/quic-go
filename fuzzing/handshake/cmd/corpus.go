@@ -4,13 +4,13 @@ import (
 	"crypto/tls"
 	"log"
 
-	fuzzhandshake "github.com/lucas-clemente/quic-go/fuzzing/handshake"
-	"github.com/lucas-clemente/quic-go/fuzzing/internal/helper"
-	"github.com/lucas-clemente/quic-go/internal/handshake"
-	"github.com/lucas-clemente/quic-go/internal/protocol"
-	"github.com/lucas-clemente/quic-go/internal/testdata"
-	"github.com/lucas-clemente/quic-go/internal/utils"
-	"github.com/lucas-clemente/quic-go/internal/wire"
+	fuzzhandshake "github.com/bassosimone/quic-go/fuzzing/handshake"
+	"github.com/bassosimone/quic-go/fuzzing/internal/helper"
+	"github.com/bassosimone/quic-go/internal/handshake"
+	"github.com/bassosimone/quic-go/internal/protocol"
+	"github.com/bassosimone/quic-go/internal/testdata"
+	"github.com/bassosimone/quic-go/internal/utils"
+	"github.com/bassosimone/quic-go/internal/wire"
 )
 
 type chunk struct {

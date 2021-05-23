@@ -4,8 +4,8 @@ import (
 	"crypto"
 	"crypto/tls"
 
-	"github.com/lucas-clemente/quic-go/internal/protocol"
-	"github.com/lucas-clemente/quic-go/internal/qtls"
+	"github.com/bassosimone/quic-go/internal/protocol"
+	"github.com/bassosimone/quic-go/internal/qtls"
 )
 
 var (

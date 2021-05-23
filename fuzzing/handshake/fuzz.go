@@ -14,11 +14,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/lucas-clemente/quic-go/fuzzing/internal/helper"
-	"github.com/lucas-clemente/quic-go/internal/handshake"
-	"github.com/lucas-clemente/quic-go/internal/protocol"
-	"github.com/lucas-clemente/quic-go/internal/utils"
-	"github.com/lucas-clemente/quic-go/internal/wire"
+	"github.com/bassosimone/quic-go/fuzzing/internal/helper"
+	"github.com/bassosimone/quic-go/internal/handshake"
+	"github.com/bassosimone/quic-go/internal/protocol"
+	"github.com/bassosimone/quic-go/internal/utils"
+	"github.com/bassosimone/quic-go/internal/wire"
 )
 
 var (
